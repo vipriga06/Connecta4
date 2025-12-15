@@ -106,7 +106,10 @@ class MainActivity : AppCompatActivity() {
     private fun createButtons() {
         buttons = Array(COLS) { Button(this) }
         val arrowDrawable = ContextCompat.getDrawable(this, R.drawable.arrow)
-        val drawablePadding = (4 * resources.displayMetrics.density).toInt()
+        // Escalar el drawable a un tamaño pequeño (24dp)
+        val iconSize = (24 * resources.displayMetrics.density).toInt()
+        arrowDrawable?.setBounds(0, 0, iconSize, iconSize)
+        
         for (col in 0 until COLS) {
             val button = Button(this)
             button.text = ""
@@ -115,8 +118,10 @@ class MainActivity : AppCompatActivity() {
             button.layoutParams = layoutParams
             button.setBackgroundResource(R.drawable.rounded_button)
             button.setTextColor(resources.getColor(android.R.color.white, null))
-            button.compoundDrawablePadding = drawablePadding
-            button.setCompoundDrawablesWithIntrinsicBounds(null, arrowDrawable, null, null)
+            button.gravity = android.view.Gravity.CENTER
+            button.setCompoundDrawables(null, null, null, arrowDrawable?.constantState?.newDrawable())
+            button.compoundDrawablePadding = 0
+            button.setPadding(0, 0, 0, 0)
             button.setOnClickListener {
                 if (!gameOver) {
                     dropChip(col)
