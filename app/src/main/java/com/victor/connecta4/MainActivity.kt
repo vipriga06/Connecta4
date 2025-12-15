@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -104,15 +105,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun createButtons() {
         buttons = Array(COLS) { Button(this) }
+        val arrowDrawable = ContextCompat.getDrawable(this, R.drawable.arrow)
+        val drawablePadding = (4 * resources.displayMetrics.density).toInt()
         for (col in 0 until COLS) {
             val button = Button(this)
-            button.text = "↓"
+            button.text = ""
             val layoutParams = LinearLayout.LayoutParams(0, 80, 1f)
             layoutParams.setMargins(4, 0, 4, 0)  // Espaciado lateral entre botones
             button.layoutParams = layoutParams
             button.setBackgroundResource(R.drawable.rounded_button)
             button.setTextColor(resources.getColor(android.R.color.white, null))
-            button.textSize = 24f
+            button.compoundDrawablePadding = drawablePadding
+            button.setCompoundDrawablesWithIntrinsicBounds(null, arrowDrawable, null, null)
             button.setOnClickListener {
                 if (!gameOver) {
                     dropChip(col)
