@@ -3,6 +3,7 @@ package com.victor.connecta4
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TableLayout
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val board = Array(ROWS) { IntArray(COLS) }
     private var currentPlayer = RED
     private lateinit var chips: Array<Array<ImageView>>
-    private lateinit var buttons: Array<Button>
+    private lateinit var buttons: Array<ImageButton>
     private var gameOver = false
     private var chipSize = 0
 
@@ -104,24 +105,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createButtons() {
-        buttons = Array(COLS) { Button(this) }
-        val arrowDrawable = ContextCompat.getDrawable(this, R.drawable.arrow)
-        // Escalar el drawable a un tamaño pequeño (24dp)
-        val iconSize = (24 * resources.displayMetrics.density).toInt()
-        arrowDrawable?.setBounds(0, 0, iconSize, iconSize)
+        buttons = Array(COLS) { ImageButton(this) }
         
         for (col in 0 until COLS) {
-            val button = Button(this)
-            button.text = ""
+            val button = ImageButton(this)
             val layoutParams = LinearLayout.LayoutParams(0, 80, 1f)
             layoutParams.setMargins(4, 0, 4, 0)  // Espaciado lateral entre botones
             button.layoutParams = layoutParams
             button.setBackgroundResource(R.drawable.rounded_button)
-            button.setTextColor(resources.getColor(android.R.color.white, null))
-            button.gravity = android.view.Gravity.CENTER
-            button.setCompoundDrawables(null, null, null, arrowDrawable?.constantState?.newDrawable())
-            button.compoundDrawablePadding = 0
-            button.setPadding(0, 0, 0, 0)
+            button.setImageResource(R.drawable.arrow)
+            button.scaleType = ImageView.ScaleType.FIT_CENTER
+            button.setPadding(16, 16, 16, 16)
+            button.adjustViewBounds = true
+            
             button.setOnClickListener {
                 if (!gameOver) {
                     dropChip(col)
