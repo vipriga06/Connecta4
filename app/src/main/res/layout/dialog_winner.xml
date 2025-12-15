@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@drawable/rounded_card">
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="¡Ha ganado la partida!"
         android:textSize="16sp"
-        android:textColor="#666666"
+        android:textColor="@color/text_secondary"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:gravity="center" />
