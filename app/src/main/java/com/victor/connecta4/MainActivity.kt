@@ -1,6 +1,7 @@
 package com.victor.connecta4
 
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -46,6 +47,10 @@ class MainActivity : AppCompatActivity() {
 
         initializeBoard()
         createButtons()
+        
+        // Animar entrada del tablero
+        val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in_scale)
+        gameBoard.startAnimation(fadeInAnimation)
     }
 
     private fun initializeBoard() {
@@ -79,9 +84,15 @@ class MainActivity : AppCompatActivity() {
             val button = Button(this)
             button.text = "↓"
             button.layoutParams = LinearLayout.LayoutParams(0, 100, 1f)
+            button.setBackgroundResource(R.drawable.rounded_button)
+            button.setTextColor(resources.getColor(android.R.color.white, null))
+            button.textSize = 24f
             button.setOnClickListener {
                 if (!gameOver) {
                     dropChip(col)
+                    // Animar el botón
+                    val popInAnimation = AnimationUtils.loadAnimation(this, R.anim.chip_drop)
+                    button.startAnimation(popInAnimation)
                 }
             }
             buttons[col] = button
@@ -96,10 +107,14 @@ class MainActivity : AppCompatActivity() {
                 board[row][col] = currentPlayer
                 updateChipDisplay(row, col)
                 
+                // Animar la ficha
+                val dropAnimation = AnimationUtils.loadAnimation(this, R.anim.pop_in)
+                chips[row][col].startAnimation(dropAnimation)
+                
                 // Verificar si hay ganador
                 if (checkWin(row, col)) {
-                    showWinner()
                     gameOver = true
+                    showWinnerDialog()
                     return
                 }
                 
@@ -166,16 +181,27 @@ class MainActivity : AppCompatActivity() {
         return count >= 4
     }
 
-    private fun showWinner() {
+    private fun showWinnerDialog() {
         val playerName = if (currentPlayer == RED) "Rojo" else "Amarillo"
+        
+        val dialogView = layoutInflater.inflate(R.layout.dialog_winner, null)
+        val winnerTitle = dialogView.findViewById<android.widget.TextView>(R.id.winnerTitle)
+        val btnNewGame = dialogView.findViewById<Button>(R.id.btnNewGame)
+        
+        winnerTitle.text = "¡El jugador $playerName ha ganado!"
+        
         val dialog = AlertDialog.Builder(this)
-            .setTitle("¡Ganador!")
-            .setMessage("El jugador $playerName ha ganado")
-            .setPositiveButton("Nueva partida") { _, _ ->
-                resetGame()
-            }
+            .setView(dialogView)
             .setCancelable(false)
             .create()
+        
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        
+        btnNewGame.setOnClickListener {
+            resetGame()
+            dialog.dismiss()
+        }
+        
         dialog.show()
     }
 
