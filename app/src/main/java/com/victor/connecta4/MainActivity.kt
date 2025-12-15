@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         private const val EMPTY = 0
         private const val RED = 1
         private const val YELLOW = 2
-        private const val CHIP_SIZE = 150
+        private const val CHIP_SIZE = 110
     }
 
     private lateinit var gameBoard: TableLayout
@@ -67,7 +67,9 @@ class MainActivity : AppCompatActivity() {
 
             for (col in 0 until COLS) {
                 val chip = ImageView(this)
-                chip.layoutParams = TableRow.LayoutParams(0, CHIP_SIZE, 1f)
+                val layoutParams = TableRow.LayoutParams(CHIP_SIZE, CHIP_SIZE)
+                layoutParams.setMargins(4, 4, 4, 4)  // Espaciado entre fichas
+                chip.layoutParams = layoutParams
                 chip.setImageResource(R.drawable.chip_empty)
                 chip.scaleType = ImageView.ScaleType.FIT_CENTER
                 tableRow.addView(chip)
